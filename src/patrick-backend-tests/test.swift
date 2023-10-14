@@ -18,15 +18,13 @@ enum WolframOperation {
 }
 
 
-/// Type of the data to be sent to the front end script and displayed on the screen
-typealias DisplayData = String
-
-
 /// Takes some stroke from the UI and converts it into json format
 /// - Parameter strokeData: Data representing the stroke from the UI
 /// - Returns: The json format required by the Mathpix API
 func convertStrokeToJsonString (strokeData: Stroke) -> String throws {
-    //
+    var json: [String: Any] = []
+
+    return JSONSerialization.
 }
 
 
@@ -51,11 +49,11 @@ func fetchDataFromMathpix (strokeData: Stroke, completion: @escaping ((Result<[S
     }
 
     // Build request
-    var request = URLRequest(url: URL(string: urlString)!)
+    let request = URLRequest(url: URL(string: urlString)!)
     request.httpMethod = "POST"
-    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     request.setValue(appID, forHTTPHeaderField: "app_id")
     request.setValue(appKey, forHTTPHeaderField: "app_key")
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     request.httpBody = strokeJsonString.data(using: .utf8)
 
     // Make request
@@ -87,7 +85,7 @@ func fetchDataFromMathpix (strokeData: Stroke, completion: @escaping ((Result<[S
 /// Processes the data from the Mathpix API and prepares the Wolfram Alpha API request
 /// - Parameter data: data to be processed
 /// - Returns: Result either containing data and WolframOperation or Error
-func processForWolframAPI (data: [String: Any]) -> String throws {
+func convertMathpixResponseToInputString (data: [String: Any]) -> String throws {
     // IF DATA CAN BE PROCESSED INTO A VALID REQUEST
         // return PROCESSED_DATA
     // ELSE
@@ -104,19 +102,22 @@ func fetchDataFromWolfram (data: [String: Any], completion: @escaping ((Result<[
     // Convert data from Mathpix into wolfram input
     let wolframInputString: String?
     do {
-        wolframInputString = try processForWolframAPI(data)
+        wolframInputString = try convertMathpixResponseToInputString(data)
     } catch {
         completion(.failure(error))
     }
 
+
     // URL encode wolfram input
     guard let wolframEncodedInput = wolframInputString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
         completion(.failure(CustomError.WolframInputEncodingError))
+        return
     }
 
     // Create base url object
     guard let baseURL = URL(string: "http://api.wolframalpha.com/v2/query") else {
         completion(.failure(CustomError.WolframURLError))
+        return
     }
 
     // Append URL query items to create final URL
@@ -166,7 +167,7 @@ func processDataForDisplay (data: String) -> DisplayData throws {
 /// Handles the entire process of converting the image into text, sending the text to wolfram, and creating the data to update the screen.
 /// - Parameter src: url of the image to be converted into a result
 /// - Parameter completion: completion handler to process display data or errors during the process
-func completeProcessForWebApp (stroke: Stroke, completion: @escaping (Result<DisplayData, CustomError>) -> Void) {
+func completeProcessForWebApp (stroke: Stroke) {
     // Update UI to show request initialization
     updateUIforRequest()
 
@@ -197,13 +198,4 @@ func completeProcessForWebApp (stroke: Stroke, completion: @escaping (Result<Dis
 
 // Usage example
 let exampleString = "poop"
-completeProcessForWebApp (src: exampleString) { result in
-    switch result {
-    case .success(let displayData):
-        // Update the UI with the processed data
-        print("Processed data for display: \(displayData)")
-    case .failure(let error):
-        // Handle the error accordingly
-        print("An error occurred: \(error)")
-    }
-}
+completeProcessForWebApp (src: exampleString)
