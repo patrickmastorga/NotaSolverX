@@ -5,6 +5,7 @@ enum CustomError: Error {
     case MathpixURLError
     case MathpixResponseDecodingError
     case WolframURLError
+    case WolframInputEncodingError
     case WolframResponseDecodingError
     case UnsupportedEquationError
     case dataProcessingError
@@ -108,18 +109,23 @@ func fetchDataFromWolfram (data: [String: Any], completion: @escaping ((Result<[
         completion(.failure(error))
     }
 
+    // URL encode wolfram input
+    guard let wolframEncodedInput = wolframInputString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+        completion(.failure(CustomError.WolframInputEncodingError))
+    }
+
     // Create base url object
     guard let baseURL = URL(string: "http://api.wolframalpha.com/v2/query") else {
         completion(.failure(CustomError.WolframURLError))
     }
 
-    // Create URL query items
-    let appIDQuery = URLQueryItem(name: "appid", value: appID)
-    let 
-
-    // Append to create final URL
+    // Append URL query items to create final URL
     let url = baseURL.appending(queryItems: [
-        appIDQuery
+        URLQueryItem(name: "appid", value: appID),
+        URLQueryItem(name: "input", value: wolframEncodedInput),
+        URLQueryItem(name: "podstate", value: "Step-by-step%20solution"),
+        //URLQueryItem(name: "format", value: "image") If we REALLY want to cheat
+        URLQueryItem(name: "output", value: "json")
     ])
 
     // Make request
@@ -153,44 +159,41 @@ func fetchDataFromWolfram (data: [String: Any], completion: @escaping ((Result<[
 /// - Returns: data to be displayed about equation
 /// - Throws: Error if data from wolfram is invalid or wolfram couldnt get the answer
 func processDataForDisplay (data: String) -> DisplayData throws {
-    // IF DATA CAN BE PROCESSED INTO FORMAT FOR DISPLAY
-        // return .success(DISPLAY_DATA)
-    // ELSE
-        // throw CustomError.DataProcessingError
+    // Im thinking we somehow generate the ui components in this function
 }
 
 
 /// Handles the entire process of converting the image into text, sending the text to wolfram, and creating the data to update the screen.
 /// - Parameter src: url of the image to be converted into a result
 /// - Parameter completion: completion handler to process display data or errors during the process
-func completeProcessForWebApp (src: String, completion: @escaping (Result<DisplayData, CustomError>) -> Void) {
-    // Fetch from MathPix
-    fetchDataFromMathpix (imageURL: src) { mathpixResult in
-        guard case .success(let mathpixData) = mathpixResult else {
-            // let completion handler handle errors
-            completion(mathpixResult)
-            return
-        }
-        
-        // Process result
-        fetchDataFromWolfram(data: mathpixData) { wolframResult in
-            guard case .success(let wolframData) = wolframResult else {
-                // let completion handler handle errors
-                completion(wolframResult)
-                return
-            }
+func completeProcessForWebApp (stroke: Stroke, completion: @escaping (Result<DisplayData, CustomError>) -> Void) {
+    // Update UI to show request initialization
+    updateUIforRequest()
 
-            do {
-                // Process for display
-                completion(.success(try processDataForDisplay(wolframData)))
-            } catch {
-                // Processing wolfram data led to a error. Pass off to completion handler
-                completion(.failure(error))
-            }
+    // Fetch from MathPix
+    fetchDataFromMathpix(strokeData: stroke) { mathpixResult in
+        // Update UI to show text response from Mathix
+        updateUIforMathpixResult(mathpixResult)
+        
+        switch mathpixResult {
+            case .success(let mathpixData):
+                // Send Mathpix data to Wolfram Alpha
+                fetchDataFromWolfram(data: mathpixData) { wolframResult in
+                    // Update UI to show reponse from Wolfram Alpha
+                    updateUIforWolframAlphaResult(wolframResult)
+
+                    if case .failure(let error) {
+                        print("Wolfram error: \(error)")
+                        return
+                    }
+                }
+            case .failure(let error):
+                print("Mathpix error: \(error)")
+                return
         }
-  
     }
 }
+
 
 // Usage example
 let exampleString = "poop"
