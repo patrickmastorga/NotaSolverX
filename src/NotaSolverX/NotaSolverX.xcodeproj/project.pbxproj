@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A780B342ADC0DAA008409DF /* APIFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A780B332ADC0DAA008409DF /* APIFunctions.swift */; };
 		2AB642B42ADB159E00A28904 /* NotaSolverXApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB642B32ADB159E00A28904 /* NotaSolverXApp.swift */; };
 		2AB642B62ADB159E00A28904 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB642B52ADB159E00A28904 /* ContentView.swift */; };
 		2AB642B82ADB159E00A28904 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2AB642B72ADB159E00A28904 /* Assets.xcassets */; };
@@ -14,7 +15,6 @@
 		2AB642C52ADB159E00A28904 /* NotaSolverXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB642C42ADB159E00A28904 /* NotaSolverXTests.swift */; };
 		2AB642CF2ADB159E00A28904 /* NotaSolverXUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB642CE2ADB159E00A28904 /* NotaSolverXUITests.swift */; };
 		2AB642D12ADB159E00A28904 /* NotaSolverXUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB642D02ADB159E00A28904 /* NotaSolverXUITestsLaunchTests.swift */; };
-		2AB642DE2ADB164500A28904 /* patrick-backend-tests in Resources */ = {isa = PBXBuildFile; fileRef = 2AB642DD2ADB164500A28904 /* patrick-backend-tests */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2A780B332ADC0DAA008409DF /* APIFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIFunctions.swift; sourceTree = "<group>"; };
 		2AB642B02ADB159E00A28904 /* NotaSolverX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotaSolverX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AB642B32ADB159E00A28904 /* NotaSolverXApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotaSolverXApp.swift; sourceTree = "<group>"; };
 		2AB642B52ADB159E00A28904 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -45,7 +46,6 @@
 		2AB642CA2ADB159E00A28904 /* NotaSolverXUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotaSolverXUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AB642CE2ADB159E00A28904 /* NotaSolverXUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotaSolverXUITests.swift; sourceTree = "<group>"; };
 		2AB642D02ADB159E00A28904 /* NotaSolverXUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotaSolverXUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		2AB642DD2ADB164500A28904 /* patrick-backend-tests */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "patrick-backend-tests"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,7 +79,6 @@
 				2AB642B22ADB159E00A28904 /* NotaSolverX */,
 				2AB642C32ADB159E00A28904 /* NotaSolverXTests */,
 				2AB642CD2ADB159E00A28904 /* NotaSolverXUITests */,
-				2AB642DD2ADB164500A28904 /* patrick-backend-tests */,
 				2AB642B12ADB159E00A28904 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -101,6 +100,7 @@
 				2AB642B52ADB159E00A28904 /* ContentView.swift */,
 				2AB642B72ADB159E00A28904 /* Assets.xcassets */,
 				2AB642B92ADB159E00A28904 /* Preview Content */,
+				2A780B332ADC0DAA008409DF /* APIFunctions.swift */,
 			);
 			path = NotaSolverX;
 			sourceTree = "<group>";
@@ -235,7 +235,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2AB642BB2ADB159E00A28904 /* Preview Assets.xcassets in Resources */,
-				2AB642DE2ADB164500A28904 /* patrick-backend-tests in Resources */,
 				2AB642B82ADB159E00A28904 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -262,6 +261,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2AB642B62ADB159E00A28904 /* ContentView.swift in Sources */,
+				2A780B342ADC0DAA008409DF /* APIFunctions.swift in Sources */,
 				2AB642B42ADB159E00A28904 /* NotaSolverXApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
