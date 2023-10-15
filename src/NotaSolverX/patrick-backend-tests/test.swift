@@ -18,6 +18,11 @@ enum WolframOperation {
 }
 
 
+func StrokeFinder () {
+    
+}
+
+
 /// Takes some stroke from the UI and converts it into json format
 /// - Parameter strokeData: Data representing the stroke from the UI
 /// - Returns: The json format required by the Mathpix API

@@ -1,0 +1,588 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2AB642B42ADB159E00A28904 /* NotaSolverXApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB642B32ADB159E00A28904 /* NotaSolverXApp.swift */; };
+		2AB642B62ADB159E00A28904 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB642B52ADB159E00A28904 /* ContentView.swift */; };
+		2AB642B82ADB159E00A28904 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2AB642B72ADB159E00A28904 /* Assets.xcassets */; };
+		2AB642BB2ADB159E00A28904 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2AB642BA2ADB159E00A28904 /* Preview Assets.xcassets */; };
+		2AB642C52ADB159E00A28904 /* NotaSolverXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB642C42ADB159E00A28904 /* NotaSolverXTests.swift */; };
+		2AB642CF2ADB159E00A28904 /* NotaSolverXUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB642CE2ADB159E00A28904 /* NotaSolverXUITests.swift */; };
+		2AB642D12ADB159E00A28904 /* NotaSolverXUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB642D02ADB159E00A28904 /* NotaSolverXUITestsLaunchTests.swift */; };
+		2AB642DE2ADB164500A28904 /* patrick-backend-tests in Resources */ = {isa = PBXBuildFile; fileRef = 2AB642DD2ADB164500A28904 /* patrick-backend-tests */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2AB642C12ADB159E00A28904 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2AB642A82ADB159E00A28904 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2AB642AF2ADB159E00A28904;
+			remoteInfo = NotaSolverX;
+		};
+		2AB642CB2ADB159E00A28904 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2AB642A82ADB159E00A28904 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2AB642AF2ADB159E00A28904;
+			remoteInfo = NotaSolverX;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		2AB642B02ADB159E00A28904 /* NotaSolverX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotaSolverX.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2AB642B32ADB159E00A28904 /* NotaSolverXApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotaSolverXApp.swift; sourceTree = "<group>"; };
+		2AB642B52ADB159E00A28904 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2AB642B72ADB159E00A28904 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2AB642BA2ADB159E00A28904 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		2AB642C02ADB159E00A28904 /* NotaSolverXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotaSolverXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2AB642C42ADB159E00A28904 /* NotaSolverXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotaSolverXTests.swift; sourceTree = "<group>"; };
+		2AB642CA2ADB159E00A28904 /* NotaSolverXUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotaSolverXUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2AB642CE2ADB159E00A28904 /* NotaSolverXUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotaSolverXUITests.swift; sourceTree = "<group>"; };
+		2AB642D02ADB159E00A28904 /* NotaSolverXUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotaSolverXUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		2AB642DD2ADB164500A28904 /* patrick-backend-tests */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "patrick-backend-tests"; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2AB642AD2ADB159E00A28904 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2AB642BD2ADB159E00A28904 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2AB642C72ADB159E00A28904 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2AB642A72ADB159E00A28904 = {
+			isa = PBXGroup;
+			children = (
+				2AB642B22ADB159E00A28904 /* NotaSolverX */,
+				2AB642C32ADB159E00A28904 /* NotaSolverXTests */,
+				2AB642CD2ADB159E00A28904 /* NotaSolverXUITests */,
+				2AB642DD2ADB164500A28904 /* patrick-backend-tests */,
+				2AB642B12ADB159E00A28904 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2AB642B12ADB159E00A28904 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2AB642B02ADB159E00A28904 /* NotaSolverX.app */,
+				2AB642C02ADB159E00A28904 /* NotaSolverXTests.xctest */,
+				2AB642CA2ADB159E00A28904 /* NotaSolverXUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2AB642B22ADB159E00A28904 /* NotaSolverX */ = {
+			isa = PBXGroup;
+			children = (
+				2AB642B32ADB159E00A28904 /* NotaSolverXApp.swift */,
+				2AB642B52ADB159E00A28904 /* ContentView.swift */,
+				2AB642B72ADB159E00A28904 /* Assets.xcassets */,
+				2AB642B92ADB159E00A28904 /* Preview Content */,
+			);
+			path = NotaSolverX;
+			sourceTree = "<group>";
+		};
+		2AB642B92ADB159E00A28904 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				2AB642BA2ADB159E00A28904 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		2AB642C32ADB159E00A28904 /* NotaSolverXTests */ = {
+			isa = PBXGroup;
+			children = (
+				2AB642C42ADB159E00A28904 /* NotaSolverXTests.swift */,
+			);
+			path = NotaSolverXTests;
+			sourceTree = "<group>";
+		};
+		2AB642CD2ADB159E00A28904 /* NotaSolverXUITests */ = {
+			isa = PBXGroup;
+			children = (
+				2AB642CE2ADB159E00A28904 /* NotaSolverXUITests.swift */,
+				2AB642D02ADB159E00A28904 /* NotaSolverXUITestsLaunchTests.swift */,
+			);
+			path = NotaSolverXUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2AB642AF2ADB159E00A28904 /* NotaSolverX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2AB642D42ADB159E00A28904 /* Build configuration list for PBXNativeTarget "NotaSolverX" */;
+			buildPhases = (
+				2AB642AC2ADB159E00A28904 /* Sources */,
+				2AB642AD2ADB159E00A28904 /* Frameworks */,
+				2AB642AE2ADB159E00A28904 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NotaSolverX;
+			productName = NotaSolverX;
+			productReference = 2AB642B02ADB159E00A28904 /* NotaSolverX.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2AB642BF2ADB159E00A28904 /* NotaSolverXTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2AB642D72ADB159E00A28904 /* Build configuration list for PBXNativeTarget "NotaSolverXTests" */;
+			buildPhases = (
+				2AB642BC2ADB159E00A28904 /* Sources */,
+				2AB642BD2ADB159E00A28904 /* Frameworks */,
+				2AB642BE2ADB159E00A28904 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2AB642C22ADB159E00A28904 /* PBXTargetDependency */,
+			);
+			name = NotaSolverXTests;
+			productName = NotaSolverXTests;
+			productReference = 2AB642C02ADB159E00A28904 /* NotaSolverXTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		2AB642C92ADB159E00A28904 /* NotaSolverXUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2AB642DA2ADB159E00A28904 /* Build configuration list for PBXNativeTarget "NotaSolverXUITests" */;
+			buildPhases = (
+				2AB642C62ADB159E00A28904 /* Sources */,
+				2AB642C72ADB159E00A28904 /* Frameworks */,
+				2AB642C82ADB159E00A28904 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2AB642CC2ADB159E00A28904 /* PBXTargetDependency */,
+			);
+			name = NotaSolverXUITests;
+			productName = NotaSolverXUITests;
+			productReference = 2AB642CA2ADB159E00A28904 /* NotaSolverXUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2AB642A82ADB159E00A28904 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1320;
+				LastUpgradeCheck = 1320;
+				TargetAttributes = {
+					2AB642AF2ADB159E00A28904 = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
+					2AB642BF2ADB159E00A28904 = {
+						CreatedOnToolsVersion = 13.2.1;
+						TestTargetID = 2AB642AF2ADB159E00A28904;
+					};
+					2AB642C92ADB159E00A28904 = {
+						CreatedOnToolsVersion = 13.2.1;
+						TestTargetID = 2AB642AF2ADB159E00A28904;
+					};
+				};
+			};
+			buildConfigurationList = 2AB642AB2ADB159E00A28904 /* Build configuration list for PBXProject "NotaSolverX" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 2AB642A72ADB159E00A28904;
+			productRefGroup = 2AB642B12ADB159E00A28904 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2AB642AF2ADB159E00A28904 /* NotaSolverX */,
+				2AB642BF2ADB159E00A28904 /* NotaSolverXTests */,
+				2AB642C92ADB159E00A28904 /* NotaSolverXUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2AB642AE2ADB159E00A28904 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2AB642BB2ADB159E00A28904 /* Preview Assets.xcassets in Resources */,
+				2AB642DE2ADB164500A28904 /* patrick-backend-tests in Resources */,
+				2AB642B82ADB159E00A28904 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2AB642BE2ADB159E00A28904 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2AB642C82ADB159E00A28904 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2AB642AC2ADB159E00A28904 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2AB642B62ADB159E00A28904 /* ContentView.swift in Sources */,
+				2AB642B42ADB159E00A28904 /* NotaSolverXApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2AB642BC2ADB159E00A28904 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2AB642C52ADB159E00A28904 /* NotaSolverXTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2AB642C62ADB159E00A28904 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2AB642D12ADB159E00A28904 /* NotaSolverXUITestsLaunchTests.swift in Sources */,
+				2AB642CF2ADB159E00A28904 /* NotaSolverXUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2AB642C22ADB159E00A28904 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2AB642AF2ADB159E00A28904 /* NotaSolverX */;
+			targetProxy = 2AB642C12ADB159E00A28904 /* PBXContainerItemProxy */;
+		};
+		2AB642CC2ADB159E00A28904 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2AB642AF2ADB159E00A28904 /* NotaSolverX */;
+			targetProxy = 2AB642CB2ADB159E00A28904 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		2AB642D22ADB159E00A28904 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		2AB642D32ADB159E00A28904 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2AB642D52ADB159E00A28904 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"NotaSolverX/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = OSIorDIE.NotaSolverX;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2AB642D62ADB159E00A28904 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"NotaSolverX/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = OSIorDIE.NotaSolverX;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		2AB642D82ADB159E00A28904 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = OSIorDIE.NotaSolverXTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NotaSolverX.app/NotaSolverX";
+			};
+			name = Debug;
+		};
+		2AB642D92ADB159E00A28904 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = OSIorDIE.NotaSolverXTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NotaSolverX.app/NotaSolverX";
+			};
+			name = Release;
+		};
+		2AB642DB2ADB159E00A28904 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = OSIorDIE.NotaSolverXUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = NotaSolverX;
+			};
+			name = Debug;
+		};
+		2AB642DC2ADB159E00A28904 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = OSIorDIE.NotaSolverXUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = NotaSolverX;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2AB642AB2ADB159E00A28904 /* Build configuration list for PBXProject "NotaSolverX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2AB642D22ADB159E00A28904 /* Debug */,
+				2AB642D32ADB159E00A28904 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2AB642D42ADB159E00A28904 /* Build configuration list for PBXNativeTarget "NotaSolverX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2AB642D52ADB159E00A28904 /* Debug */,
+				2AB642D62ADB159E00A28904 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2AB642D72ADB159E00A28904 /* Build configuration list for PBXNativeTarget "NotaSolverXTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2AB642D82ADB159E00A28904 /* Debug */,
+				2AB642D92ADB159E00A28904 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2AB642DA2ADB159E00A28904 /* Build configuration list for PBXNativeTarget "NotaSolverXUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2AB642DB2ADB159E00A28904 /* Debug */,
+				2AB642DC2ADB159E00A28904 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2AB642A82ADB159E00A28904 /* Project object */;
+}
