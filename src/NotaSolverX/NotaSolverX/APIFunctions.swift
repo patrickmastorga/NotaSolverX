@@ -1,8 +1,6 @@
 //
 //  APIFunctions.swift
-//  Sidebar
-//
-//  Created by Maks Kushniryk on 10/15/23.
+//  NotaSolverX
 //
 
 import Foundation
@@ -15,6 +13,7 @@ enum CustomError: Error {
     case WolframURLError
     case WolframInputEncodingError
     case WolframResponseDecodingError
+    case WolframResponseError
     case UnsupportedEquationError
     case dataProcessingError
 }
@@ -64,7 +63,7 @@ func convertStrokeToJsonData (strokeData: [[CGPoint]]) -> Data? {
 /// Get the text representation of the formula from Mathpix API
 /// - Parameter strokeJsonString: JSON reprentation of the stroke
 /// - Parameter completion: completion handler to process data
-func fetchDataFromMathpix (strokeData: [[CGPoint]], completion: @escaping ((Result<[String: Any], Error>) -> Void)) {
+func fetchDataFromMathpix (strokeData: [[CGPoint]], completion: @escaping ((Result<String, Error>) -> Void)) {
     let appID = "notasolverx_12721e_64cb20"
     let appKey = "e8070a38f235821bbec6507a6a5841e444d287e30640f0ab37935fdbdc647c33" // FIGURE OUT CLIENT SIDE TOKENS
 
@@ -101,7 +100,10 @@ func fetchDataFromMathpix (strokeData: [[CGPoint]], completion: @escaping ((Resu
         // Parse response as json
         do {
             if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                completion(.success(jsonResponse))
+                guard let resultString = jsonObject["latex_styled"] as? String else {
+                    completion(.failure(CustomError.MathpixResponseDecodingError))
+                }
+                completion(.success(resultString))
             } else {
                 completion(.failure(CustomError.MathpixResponseDecodingError))
                 return
@@ -117,32 +119,26 @@ func fetchDataFromMathpix (strokeData: [[CGPoint]], completion: @escaping ((Resu
 }
 
 
-/// Processes the data from the Mathpix API and prepares the Wolfram Alpha API request
-/// - Parameter data: data to be processed
-/// - Returns: Result either containing data and WolframOperation or Error
-func convertMathpixResponseToInputString (data: [String: Any]) throws -> String {
-    guard let latex = data["latex_styled"] as? String else {
-        throw CustomError.MathpixResponseDecodingError
-    }
+/// Processes the data from the Mathpix API and prepares the Wolfram Alpha API input string
+/// - Parameter data: Equation written in latex format
+/// - Returns: Wolframalpha input string
+func convertMathpixResponseToInputString (latex: String) -> String {
+    // IMPLEMENT INPUT MANIPULATION FOR BETTER RESULT??
     return latex
 }
 
 
 /// Gets the solution and all of the steps from Wolfram Aplha API
-/// - Parameter Data:
+/// - Parameter latex: Equation written in latex format
 /// - Parameter completion: completion handler to process data
-func fetchDataFromWolfram (data: [String: Any], completion: @escaping ((Result<[String: Any], Error>) -> Void)) {
+func fetchDataFromWolfram (latex: String, completion: @escaping ((Result<[String: Any], Error>) -> Void)) {
     let appID = "JG4TGL-G86953GKY8"
 
     // Convert data from Mathpix into wolfram input
-    let wolframInputString: String?
-    do {
-        wolframInputString = try convertMathpixResponseToInputString(data: data)
-    } catch {
-        completion(.failure(error))
-        return
-    }
+    let wolframInputString = convertMathpixResponseToInputString(latex)
 
+    // Print out wolfram input string
+    print("Wolfram input string (in request): \(wolframInputString)")
 
     // Create base url object
     guard var baseURL = URLComponents(string: "https://api.wolframalpha.com/v2/query") else {

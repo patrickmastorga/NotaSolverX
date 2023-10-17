@@ -1,6 +1,7 @@
 import SwiftUI
 import PencilKit
 
+/// Represents a color for the Pencil Kit pen
 struct ColorInfo: Identifiable, Hashable {
     let id = UUID()
     let color: Color
@@ -8,37 +9,54 @@ struct ColorInfo: Identifiable, Hashable {
 }
 
 struct ContentView: View {
+    /// Pencil Kit Drawing canvas
     @State var canvas = PKCanvasView()
-    @State private var currentPosition: CGSize = CGSize(width: 200, height: 450)
-    @State private var newSize: CGSize = CGSize(width: 400, height: 150)
-    @State private var showRectangle: Bool = false
-    @State var currentTool: PKTool = PKInkingTool(.pen, color: .black, width: 10) // Default tool is the pen.
-    @State private var selectedColor: ColorInfo = ColorInfo(color: .black, uiColor: .black) // Default color selection
+    /// Which Pencil Kit tool is currently selected
+    @State var currentTool: PKTool = PKInkingTool(.pen, color: .black, width: 10)
+    /// Which color is currently selected for the Pencil Kit pen input
+    @State private var selectedColor: ColorInfo = ColorInfo(color: .black, uiColor: .black)
+    /// String representation of the current color
     @State var selection: String = "black"
+
+    /// Represents current position of snipping rectangle
+    @State private var currentPosition: CGSize = CGSize(width: 200, height: 450)
+    /// Represents current size of snipping rectangle
+    @State private var newSize: CGSize = CGSize(width: 400, height: 150)
+    /// Represents whether or not the snipping rectangle is visible
+    @State private var showRectangle: Bool = false
     
+    /// Color options for the Pencil Kit pen tool
     let colors: [ColorInfo] = [
            ColorInfo(color: .black, uiColor: .black),
            ColorInfo(color: .red, uiColor: .red),
            ColorInfo(color: .green, uiColor: .green),
            ColorInfo(color: .blue, uiColor: .blue)
        ]
-    
+
+    /// Array containing EquationBoxes for all of the solved inputs
     @State private var equationBoxes: [EquationBox] = []
     
     var body: some View {
+        // Main ZStack containing every layer of components on the screen (drawing kit -> snipping rectangle -> buttons + output)
         ZStack {
+            // Add the Pencil Kit drawing canvas to the screen
             DrawingView(canvas: $canvas)
             
-            if showRectangle {
+            // Display the snipping rectangle if user has enabled it
+            if (showRectangle) {
                 ResizableRectangle(currentPosition: $currentPosition, newSize: $newSize)
                     .border(Color.white, width: 1)
             }
             
+            // Main VStack for all of the UI components (buttons and output)
             VStack {
+                // HStack spanning the top majority of the screen
                 HStack {
                     Spacer()
 
+                    // Vstack for displaying all of the outputs
                     VStack {
+                        // Display every equation box on screen
                         ScrollView {
                             ForEach(equationBoxes, id: \.self) { box in
                                 box
@@ -52,8 +70,11 @@ struct ContentView: View {
                     .border(Color.black, width: 2)
                 }
                 
+                // HStack on bottom of screen for UI inputs
                 HStack {
+                    // Color selection menu
                     Menu {
+                        // Honestly don't really know what this does
                         ForEach(colors) { colorInfo in
                             Button(action: {
                                 self.selectedColor = colorInfo
@@ -78,6 +99,7 @@ struct ContentView: View {
                     }
                     .padding()
     
+                    // Button for selecting pen input
                     Button("🖊") {
                         currentTool = PKInkingTool(.pen, color: .black, width: 10)
                         canvas.tool = currentTool
@@ -85,6 +107,7 @@ struct ContentView: View {
                     .padding()
                     .font(.system(size: 35))
                     
+                    // Button for selecting eraser input
                     Button("❌") {
                         currentTool = PKEraserTool(.vector) // Use vector eraser type
                         canvas.tool = currentTool
@@ -92,16 +115,17 @@ struct ContentView: View {
                     .padding()
                     .font(.system(size: 35))
                     
+                    // Button for toggling snipping rectangle
                     Button("🔲") {
                         showRectangle.toggle()
                     }
                     .padding()
                     .font(.system(size: 35))
                     
+                    // Button for submitting input
                     if showRectangle {
                         Button("✅") {
-                            print("Hello Wolrd")
-                            processStrokesInRect(rect: getBoundingRect())
+                            submit()
                             showRectangle = false
                         }
                         .padding()
@@ -112,22 +136,33 @@ struct ContentView: View {
         }
     }
     
+
+    /// Returns an array of paths from the Pencil Kit drawing canvas
+    /// Only paths within a specified rectangle are included
+    /// Paths are represented as an array of CGPoints
+    /// - Parameter rect: the CGRect you want paths within
+    /// - Returns: Array of paths within the rectangle
     func getStrokePointsInRect(rect: CGRect) -> [[CGPoint]] {
         var paths: [[CGPoint]] = []
         
+        // Only consider paths whose bounding box intersect the rectangle for efficiency
         let intersectingStrokes = canvas.drawing.strokes.filter { stroke in
             stroke.renderBounds.intersects(rect)
         }
         
         for stroke in intersectingStrokes {
+            // Stores current path in search
             var path: [CGPoint] = []
             var pathLength = 0;
             
             for point in stroke.path {
+                // Check if every point is within specified rectangle
                 if (rect.contains(point.location)) {
+                    // Add points within rectangle to current path
                     path.append(point.location)
                     pathLength += 1
                 } else {
+                    // When the stroke exits the rectangle, add current path to paths
                     if pathLength > 1 {
                         paths.append(path)
                     }
@@ -136,124 +171,116 @@ struct ContentView: View {
                 }
             }
             
+            // Add current path is stroke ended within the rectangle
             if pathLength > 1 {
                 paths.append(path)
             }
         }
+
         return paths
     }
     
+    /// Create new output window for the input and reflect that the request has been made
     func updateUIForRequest() {
         print("request made")
     }
+
     
-    func updateUIForMathpixResult(result: Result<[String: Any], Error>) {
+    /// Takes the response from wolfram alpha API and converts it into a array of "pods"
+    /// - Returns result containing the list of pods
+    func getPodsFromWolframResponse(result: Result<[String, Any], Error>) -> Result<[WolframPod], Error> {
         switch result {
         case .success(let data):
-            print("mathpix success: \(data)")
-        case .failure(let error):
-            print("mathpix failure: \(error)")
-        }
-    }
-    
-    func updateUIForWolframAlphaResult(result: Result<[String: Any], Error>) {
-        switch result {
-        case .success(let data):
-            guard let queryresult = data["queryresult"] as? [String: Any] else {
-                //Error handle
-                return
+            // Checking if wolfram response is a success
+            guard let success = data["success"] as? Bool else {
+                return .failure(CustomError.WolframResponseDecodingError)
             }
-            guard let pods = queryresult["pods"] as? [[String: Any]] else {
-                //Error handle
-                return
+            guard let error = data["error"] as? Bool else {
+                return .failure(CustomError.WolframResponseDecodingError)
             }
-            
-            var inputURL: String? = nil
-            var stepsURL: String? = nil
-            
-            for pod in pods {
-                if let idString = pod["id"] as? String {
-                    
-                    if idString == "Input" {
-                        guard let subpods = pod["subpods"] as? [[String: Any]] else {
-                            //Error handle
-                            return
-                        }
-                        guard let img = subpods[0]["img"] as? [String: Any] else {
-                            //Error handle
-                            return
-                        }
-                        inputURL = img["src"] as? String
-                    }
-                    
-                    if idString == "Result" {
-                        /*
-                        guard let subpods = pod["subpods"] as? [[String: Any]] else {
-                            //Error handle
-                            return
-                        }
-                        guard let img = subpods[0]["img"] as? [String: Any] else {
-                            //Error handle
-                            return
-                        }
-                        stepsURL = img["src"] as? String
-                        */
-                        
-                        guard let subpods = pod["subpods"] as? [[String: Any]] else {
-                            //Error handle
-                            return
-                        }
-                        for subpod in subpods {
-                            if let titleString = subpod["title"] as? String {
-                                if titleString == "Possible intermediate steps" {
-                                    guard let img = subpod["img"] as? [String: Any] else {
-                                        //Error handle
-                                        return
-                                    }
-                                    stepsURL = img["src"] as? String
-                                }
-                            }
-                        }
-                        
-                        
-                    }
-                }
-            }
-            
-            guard let inputURL = inputURL else {
-                equationBoxes.append(EquationBox(inputURL: "https://www.computerhope.com/jargon/e/error.png", stepsURL: "https://www.computerhope.com/jargon/e/error.png"))
-                return
-            }
-            guard let stepsURL = stepsURL else {
-                equationBoxes.append(EquationBox(inputURL: inputURL, stepsURL: "https://www.computerhope.com/jargon/e/error.png"))
-                return
+            if (!success || error) {
+                return .failure(CustomError.WolframResponseError)
             }
 
-            equationBoxes.append(EquationBox(inputURL: inputURL, stepsURL: stepsURL))
-            
-        case .failure(let error):
-            equationBoxes.append(EquationBox(inputURL: "https://www.computerhope.com/jargon/e/error.png", stepsURL: "https://www.computerhope.com/jargon/e/error.png"))
+            // Print out input string
+            guard let inputstring = data["inputstring"] as? String else {
+                return .failure(CustomError.WolframResponseDecodingError)
+            }
+            print("Wolfram input string (in response):", inputstring)
+
+            // Array for storing parsed pods
+            let parsed: [WolframPod] = []
+
+            let ids: [String] = []
+
+            // Get the pods from the response
+            guard let pods = data["pods"] as? [[String: Any]] else {
+                return .failure(CustomError.WolframResponseDecodingError)
+            }
+            for pod in pods {
+                let podinfo = [String: String]
+
+                // Get neccessary info about the pod
+                guard let podTitle = pod["title"] as? String else {
+                    return .failure(CustomError.WolframResponseDecodingError)
+                }
+                guard let id = pod["id"] as? String else {
+                    return .failure(CustomError.WolframResponseDecodingError)
+                }
+
+                ids.append(id)
+
+                // Get the subpods from the pod
+                guard let subpods = pod["subpods"] as? [[String: Any]] else {
+                    return .failure(CustomError.WolframResponseDecodingError)
+                }
+                for subpods in subpods {
+                    guard let subpodTitle = subpod["title"] as? String else {
+                        return .failure(CustomError.WolframResponseDecodingError)
+                    }
+                    guard let img = subpod["img"] as? [String, Any] else {
+                        return .failure(CustomError.WolframResponseDecodingError)
+                    }
+                    guard let src = img["src"] as? String else {
+                        return .failure(CustomError.WolframResponseDecodingError)
+                    }
+                    
+                    // Create parsed pod object
+                    let title = subpodTitle.isEmpty ? podTitle : "\(podTitle): \(subpodTitle)"
+                    parsed.append(WolframPod(title: title, imgSrc: img))
+                }
+            }
+
+            // Check if response contained the pods expected
+            if (parsed.count == 0 || !ids.contains("Input") || !ids.contain("Result")) {
+                return .failure(CustomError.WolframResponseDecodingError)
+            }
+
+            return parsed
+        case .failure:
+            return result
         }
     }
+
     
     /// Handles the entire process of converting the image into text, sending the text to wolfram, and creating the data to update the screen.
     /// - Parameter src: url of the image to be converted into a result
     /// - Parameter completion: completion handler to process display data or errors during the process
-    func ProcessStrokes (strokes: [[CGPoint]]) {
-        // Update UI to show request initialization
-        updateUIForRequest()
-        
+    func processStrokes(strokes: [[CGPoint]], box: EquationBox) {        
         // Fetch from MathPix
         fetchDataFromMathpix(strokeData: strokes) { mathpixResult in
             // Update UI to show text response from Mathix
-            updateUIForMathpixResult(result: mathpixResult)
+            box.displayMathpixData(result: mathpixResult)
             
             switch mathpixResult {
             case .success(let mathpixData):
+                // Print out mathpix output
+                print("Mathpix output string \(mathpixData)")
+
                 // Send Mathpix data to Wolfram Alpha
                 fetchDataFromWolfram(data: mathpixData) { wolframResult in
                     // Update UI to show reponse from Wolfram Alpha
-                    updateUIForWolframAlphaResult(result: wolframResult)
+                    box.displayWolframData(result: getPodsFromWolframResponse(wolframResult))
                     
                     if case .failure(let error) = wolframResult {
                         print("Wolfram error: \(error)")
@@ -266,25 +293,27 @@ struct ContentView: View {
             }
         }
     }
+
     
-    func processStrokesInRect(rect: CGRect) {
-        ProcessStrokes(strokes: getStrokePointsInRect(rect: rect))
-    }
-    
+    /// Gets the rectangle covered by the snipping rectangle at the current moment
+    /// - Returns: the CGRect representing where the snipping rectagle covers
     func getBoundingRect() -> CGRect {
         return CGRect(x: currentPosition.width,
                       y: currentPosition.height,
                       width: newSize.width,
                       height: newSize.height)
     }
-}
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+
+    func submit() {
+        let newBox = EquationBox()
+        equationBoxes.insert(newBox, at: 0)
+        processStrokes(strokes: getStrokePointsInRect(), box: newBox)
     }
 }
 
+
+/// Setup required for the creating the Pencil Kit drawing canvas
 struct DrawingView: UIViewRepresentable {
     @Binding var canvas: PKCanvasView
     
@@ -296,6 +325,9 @@ struct DrawingView: UIViewRepresentable {
     func updateUIView(_ uiView: PKCanvasView, context: Context) { }
 }
 
+
+/// View for snipping rectangle
+/// Consists of a transparent rectangle with a small circle in the corner to allow for resizing
 struct ResizableRectangle: View {
     @Binding var currentPosition: CGSize
     @Binding var newSize: CGSize
@@ -340,58 +372,84 @@ struct ResizableRectangle: View {
     }
 }
 
-struct EquationBox: View, Hashable {
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(inputURL)
-        hasher.combine(stepsURL)
-    }
-    
-    static func == (lhs: EquationBox, rhs: EquationBox) -> Bool {
-        return lhs.inputURL == rhs.inputURL && lhs.stepsURL == rhs.stepsURL
-    }
 
-    var inputURL: String
-    var stepsURL: String
+/// Represents a pod returned from Wolfram Alpha
+struct WolframPod: Hashable {
+    public let title: String
+    public let imgSrc: String
+    public static let ERROR: WolframPod = WolframPod(title: "ERROR", imgSrc: "https://www.computerhope.com/jargon/e/error.png")
+}
+
+
+/// View for containing information about a input
+/// Includes Mathpix Output and all of the pods returned from wolfram aplha
+struct EquationBox: View, Hashable {
+    /// Int representing the stage of the Equation Box
+    /// 0 - Request initialized
+    /// 1 - Mathpix response recieved
+    /// 2 - Wolfram response recieved
+    @state private var status: Int = 0
+
+    /// String representation of input written as latex
+    @state private var latex: String = "you shouldn't see this text"
+    /// List of pods returned from Wolfram
+    @state private var pods: [WolframPod] = []
     
+    /// Whether or not the equation box is expanded
     @State private var isExpanded = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        // Main VStack for storing all information in box
+        VStack() {
+            // Top portion for displaying latex text of input
             HStack() {
                 Spacer()
                 
-                AsyncImage(url: URL(string: inputURL)) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                } placeholder: {
-                    // Placeholder view while the image is loading
-                    Text("Loading...")
+                // Show loading symbol when Mathpix result is loading
+                if (status == 0) {
+                    Text("Loading data from Mathpix...")
+                        .padding()
+
+                    ProgressView()
+                } 
+                // Otherwise display Mathpix latex text
+                else {
+                    Text(latex)
+                        .padding()
                 }
-                .padding()
                 
                 Spacer()
             }
             
-            if isExpanded {
-                HStack() {
-                    Spacer()
-                    
-                    AsyncImage(url: URL(string: stepsURL)) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                    } placeholder: {
-                        // Placeholder view while the image is loading
-                        Text("error")
+            if (isExpanded && status != 0) {
+                // Show loading symbol when Wolfram result is loading
+                if (status == 1) {
+                    Text("Loading data from Wolfram...")
+                        .padding()
+
+                    ProgressView()
+                }
+                // Otherwise display all of the pods
+                else {
+                    ForEach(pods, id: \.self) { pod in
+                        AsyncImage(url: URL(string: pod.imgSrc)) { image in
+                            // Make image as wide as possible
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(maxWidth: .infinity)
+                        } placeholder: {
+                            Text("Loading image...")
+                                .padding()
+
+                            ProgressView()
+                        }
+                        
                     }
-                    .padding()
-                    
-                    Spacer()
                 }
             }
             
+            // Button for expanding/collapsing the additional info
             Button(action: {
                 withAnimation {
                     isExpanded.toggle()
@@ -406,5 +464,42 @@ struct EquationBox: View, Hashable {
         .padding(.horizontal, 20) // Horizontal spacing for the  box
         .shadow(radius: 5) // Add shadow for a card-like effect
         .frame(maxWidth: .infinity)
+    }
+
+    /// Update box with Mathpix data
+    /// - Parameter data: latex string from Mathpix
+    func displayMathpixData(result: Result<String, Error>) {
+        switch result {
+        case .success(let data):
+            latex = data;
+        case .failure(let error):
+            latex = "Mathpix error: \(error)"
+        }
+        status = 1;
+    }
+
+    /// Update box with Wolfram data
+    /// - Parameter data: list of parsed pods from Wolfram
+    func displayWolframData(data: Result<[WolframPod], Error>) {
+        switch result {
+        case .success(let data):
+            pods = data
+        case .failure(let error):
+            pods = [WolframPod.ERROR]
+        }
+        status = 2;
+    }
+
+
+    /// Required for the hashable interface
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(inputURL)
+        hasher.combine(stepsURL)
+    }
+    
+    
+    /// Required for the hashable interface
+    static func == (lhs: EquationBox, rhs: EquationBox) -> Bool {
+        return lhs.inputURL == rhs.inputURL && lhs.stepsURL == rhs.stepsURL
     }
 }
