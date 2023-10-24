@@ -16,6 +16,8 @@ enum CustomError: Error {
     case WolframResponseError
     case UnsupportedEquationError
     case dataProcessingError
+    case MathpixDisplayInitializationError
+    case WolframDisplayInitializationError
 }
 
 

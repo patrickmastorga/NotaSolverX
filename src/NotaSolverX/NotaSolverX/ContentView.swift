@@ -33,8 +33,8 @@ struct ContentView: View {
            ColorInfo(color: .blue, uiColor: .blue)
        ]
 
-    /// Array containing EquationBoxes for all of the solved inputs
-    @State private var equationBoxes: [EquationBox] = []
+    /// Array containing EquationInfos for all of the solved inputs
+    @State private var equationInfos: [EquationInfo] = []
     
     var body: some View {
         // Main ZStack containing every layer of components on the screen (drawing kit -> snipping rectangle -> buttons + output)
@@ -58,8 +58,8 @@ struct ContentView: View {
                     VStack {
                         // Display every equation box on screen
                         ScrollView {
-                            ForEach(equationBoxes, id: \.self) { box in
-                                box
+                            ForEach(equationInfos, id: \.self) { info in
+                                EquationBox(info)
                             }
                             
                             Spacer()
@@ -266,11 +266,11 @@ struct ContentView: View {
     /// Handles the entire process of converting the image into text, sending the text to wolfram, and creating the data to update the screen.
     /// - Parameter src: url of the image to be converted into a result
     /// - Parameter completion: completion handler to process display data or errors during the process
-    func processStrokes(strokes: [[CGPoint]], box: EquationBox) {        
+    func processStrokes(strokes: [[CGPoint]], number: Int) {        
         // Fetch from MathPix
         fetchDataFromMathpix(strokeData: strokes) { mathpixResult in
             // Update UI to show text response from Mathix
-            box.displayMathpixData(result: mathpixResult)
+            equationInfos[equationInfos.count - number] = EquationInfo(status: 1, mathpix: mathpixResult)
             
             switch mathpixResult {
             case .success(let mathpixData):
@@ -280,7 +280,7 @@ struct ContentView: View {
                 // Send Mathpix data to Wolfram Alpha
                 fetchDataFromWolfram(data: mathpixData) { wolframResult in
                     // Update UI to show reponse from Wolfram Alpha
-                    box.displayWolframData(result: getPodsFromWolframResponse(wolframResult))
+                    equationInfos[equationInfos.count - number] = EquationInfo(status: 2, mathpix: mathpixResult, wolfram: getPodsFromWolframResponse(wolframResult))
                     
                     if case .failure(let error) = wolframResult {
                         print("Wolfram error: \(error)")
@@ -306,9 +306,9 @@ struct ContentView: View {
 
 
     func submit() {
-        let newBox = EquationBox()
-        equationBoxes.insert(newBox, at: 0)
-        processStrokes(strokes: getStrokePointsInRect(), box: newBox)
+        let newInfo = EquationInfo()
+        equationInfos.insert(newInfo, at: 0)
+        processStrokes(strokes: getStrokePointsInRect(), number: equationInfos.count)
     }
 }
 
@@ -381,19 +381,18 @@ struct WolframPod: Hashable {
 }
 
 
+struct EquationInfo: Hashable {
+    public let status: Int = 0
+    public let mathpix: Result<String, Error> = .failure(CustomError.MathpixDisplayInitializationError)
+    public let wolfram: Result<[WolframPod], Error> = .failure(CustomError.WolframDisplayInitializationError)
+}
+
+
 /// View for containing information about a input
 /// Includes Mathpix Output and all of the pods returned from wolfram aplha
 struct EquationBox: View, Hashable {
-    /// Int representing the stage of the Equation Box
-    /// 0 - Request initialized
-    /// 1 - Mathpix response recieved
-    /// 2 - Wolfram response recieved
-    @state private var status: Int = 0
-
-    /// String representation of input written as latex
-    @state private var latex: String = "you shouldn't see this text"
-    /// List of pods returned from Wolfram
-    @state private var pods: [WolframPod] = []
+    /// Data associated with this particular EquationBox
+    @state private var info: EquationInfo
     
     /// Whether or not the equation box is expanded
     @State private var isExpanded = false
@@ -406,7 +405,7 @@ struct EquationBox: View, Hashable {
                 Spacer()
                 
                 // Show loading symbol when Mathpix result is loading
-                if (status == 0) {
+                if (info.status == 0) {
                     Text("Loading data from Mathpix...")
                         .padding()
 
@@ -414,16 +413,23 @@ struct EquationBox: View, Hashable {
                 } 
                 // Otherwise display Mathpix latex text
                 else {
-                    Text(latex)
-                        .padding()
+                    switch info.mathpix {
+                        case .success(let latex):
+                            Text(latex)
+                                .padding()
+                        case .failure(let error):
+                            Text(error)
+                                .padding()
+                    }
+                    
                 }
                 
                 Spacer()
             }
             
-            if (isExpanded && status != 0) {
+            if (isExpanded && info.status != 0) {
                 // Show loading symbol when Wolfram result is loading
-                if (status == 1) {
+                if (info.status == 1) {
                     Text("Loading data from Wolfram...")
                         .padding()
 
@@ -431,20 +437,27 @@ struct EquationBox: View, Hashable {
                 }
                 // Otherwise display all of the pods
                 else {
-                    ForEach(pods, id: \.self) { pod in
-                        AsyncImage(url: URL(string: pod.imgSrc)) { image in
-                            // Make image as wide as possible
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(maxWidth: .infinity)
-                        } placeholder: {
-                            Text("Loading image...")
-                                .padding()
+                    switch info.wolfram {
+                        case .success(let pods):
+                            ForEach(pods, id: \.self) { pod in
+                                AsyncImage(url: URL(string: pod.imgSrc)) { image in
+                                    // Make image as wide as possible
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(maxWidth: .infinity)
+                                } placeholder: {
+                                    Text("Loading image...")
+                                        .padding()
 
-                            ProgressView()
-                        }
-                        
+                                    ProgressView()
+                                }
+                                
+                            }
+
+                        case .failure(let error):
+                            Text(error)
+                                .padding()    
                     }
                 }
             }
@@ -466,40 +479,15 @@ struct EquationBox: View, Hashable {
         .frame(maxWidth: .infinity)
     }
 
-    /// Update box with Mathpix data
-    /// - Parameter data: latex string from Mathpix
-    func displayMathpixData(result: Result<String, Error>) {
-        switch result {
-        case .success(let data):
-            latex = data;
-        case .failure(let error):
-            latex = "Mathpix error: \(error)"
-        }
-        status = 1;
-    }
-
-    /// Update box with Wolfram data
-    /// - Parameter data: list of parsed pods from Wolfram
-    func displayWolframData(data: Result<[WolframPod], Error>) {
-        switch result {
-        case .success(let data):
-            pods = data
-        case .failure(let error):
-            pods = [WolframPod.ERROR]
-        }
-        status = 2;
-    }
-
-
     /// Required for the hashable interface
     func hash(into hasher: inout Hasher) {
-        hasher.combine(inputURL)
-        hasher.combine(stepsURL)
+        hasher.combine(status)
+        hasher.combine(info)
     }
     
     
     /// Required for the hashable interface
     static func == (lhs: EquationBox, rhs: EquationBox) -> Bool {
-        return lhs.inputURL == rhs.inputURL && lhs.stepsURL == rhs.stepsURL
+        return lhs.status == rhs.status && lhs.info == rhs.info
     }
 }
