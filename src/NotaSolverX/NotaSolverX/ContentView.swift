@@ -14,16 +14,16 @@ struct ContentView: View {
     /// Which Pencil Kit tool is currently selected
     @State var currentTool: PKTool = PKInkingTool(.pen, color: .black, width: 10)
     /// Which color is currently selected for the Pencil Kit pen input
-    @State private var selectedColor: ColorInfo = ColorInfo(color: .black, uiColor: .black)
+    @State var selectedColor: ColorInfo = ColorInfo(color: .black, uiColor: .black)
     /// String representation of the current color
     @State var selection: String = "black"
 
     /// Represents current position of snipping rectangle
-    @State private var currentPosition: CGSize = CGSize(width: 200, height: 450)
+    @State var currentPosition: CGSize = CGSize(width: 200, height: 450)
     /// Represents current size of snipping rectangle
-    @State private var newSize: CGSize = CGSize(width: 400, height: 150)
+    @State var newSize: CGSize = CGSize(width: 400, height: 150)
     /// Represents whether or not the snipping rectangle is visible
-    @State private var showRectangle: Bool = false
+    @State var showRectangle: Bool = false
     
     /// Color options for the Pencil Kit pen tool
     let colors: [ColorInfo] = [
@@ -34,7 +34,7 @@ struct ContentView: View {
        ]
 
     /// Array containing EquationInfos for all of the solved inputs
-    @State private var equationInfos: [EquationInfo] = []
+    @State var equationInfos: [EquationInfo] = []
     
     var body: some View {
         // Main ZStack containing every layer of components on the screen (drawing kit -> snipping rectangle -> buttons + output)
@@ -59,7 +59,7 @@ struct ContentView: View {
                         // Display every equation box on screen
                         ScrollView {
                             ForEach(equationInfos, id: \.self) { info in
-                                EquationBox(info)
+                                EquationBox(info: info)
                             }
                             
                             Spacer()
@@ -188,7 +188,7 @@ struct ContentView: View {
     
     /// Takes the response from wolfram alpha API and converts it into a array of "pods"
     /// - Returns result containing the list of pods
-    func getPodsFromWolframResponse(result: Result<[String, Any], Error>) -> Result<[WolframPod], Error> {
+    func getPodsFromWolframResponse(result: Result<[String: Any], Error>) -> Result<[WolframPod], Error> {
         switch result {
         case .success(let data):
             // Checking if wolfram response is a success
@@ -209,17 +209,15 @@ struct ContentView: View {
             print("Wolfram input string (in response):", inputstring)
 
             // Array for storing parsed pods
-            let parsed: [WolframPod] = []
+            var parsed: [WolframPod] = []
 
-            let ids: [String] = []
+            var ids: [String] = []
 
             // Get the pods from the response
             guard let pods = data["pods"] as? [[String: Any]] else {
                 return .failure(CustomError.WolframResponseDecodingError)
             }
             for pod in pods {
-                let podinfo = [String: String]
-
                 // Get neccessary info about the pod
                 guard let podTitle = pod["title"] as? String else {
                     return .failure(CustomError.WolframResponseDecodingError)
@@ -234,11 +232,11 @@ struct ContentView: View {
                 guard let subpods = pod["subpods"] as? [[String: Any]] else {
                     return .failure(CustomError.WolframResponseDecodingError)
                 }
-                for subpods in subpods {
+                for subpod in subpods {
                     guard let subpodTitle = subpod["title"] as? String else {
                         return .failure(CustomError.WolframResponseDecodingError)
                     }
-                    guard let img = subpod["img"] as? [String, Any] else {
+                    guard let img = subpod["img"] as? [String: Any] else {
                         return .failure(CustomError.WolframResponseDecodingError)
                     }
                     guard let src = img["src"] as? String else {
@@ -247,18 +245,18 @@ struct ContentView: View {
                     
                     // Create parsed pod object
                     let title = subpodTitle.isEmpty ? podTitle : "\(podTitle): \(subpodTitle)"
-                    parsed.append(WolframPod(title: title, imgSrc: img))
+                    parsed.append(WolframPod(title: title, imgSrc: src))
                 }
             }
 
             // Check if response contained the pods expected
-            if (parsed.count == 0 || !ids.contains("Input") || !ids.contain("Result")) {
+            if (parsed.count == 0 || !ids.contains("Input") || !ids.contains("Result")) {
                 return .failure(CustomError.WolframResponseDecodingError)
             }
 
-            return parsed
-        case .failure:
-            return result
+            return .success(parsed)
+        case .failure(let error):
+            return .failure(error)
         }
     }
 
@@ -266,11 +264,16 @@ struct ContentView: View {
     /// Handles the entire process of converting the image into text, sending the text to wolfram, and creating the data to update the screen.
     /// - Parameter src: url of the image to be converted into a result
     /// - Parameter completion: completion handler to process display data or errors during the process
-    func processStrokes(strokes: [[CGPoint]], number: Int) {        
+    func processStrokes(strokes: [[CGPoint]], number: Int) {
+        
+        print(equationInfos)
+        
         // Fetch from MathPix
         fetchDataFromMathpix(strokeData: strokes) { mathpixResult in
             // Update UI to show text response from Mathix
-            equationInfos[equationInfos.count - number] = EquationInfo(status: 1, mathpix: mathpixResult)
+            equationInfos[equationInfos.count - number] = EquationInfo(number: number, status: 1, mathpix: mathpixResult, wolfram: .failure(CustomError.WolframDisplayInitializationError))
+            
+            print(equationInfos)
             
             switch mathpixResult {
             case .success(let mathpixData):
@@ -278,9 +281,11 @@ struct ContentView: View {
                 print("Mathpix output string \(mathpixData)")
 
                 // Send Mathpix data to Wolfram Alpha
-                fetchDataFromWolfram(data: mathpixData) { wolframResult in
+                fetchDataFromWolfram(latex: mathpixData) { wolframResult in
                     // Update UI to show reponse from Wolfram Alpha
-                    equationInfos[equationInfos.count - number] = EquationInfo(status: 2, mathpix: mathpixResult, wolfram: getPodsFromWolframResponse(wolframResult))
+                    equationInfos[equationInfos.count - number] = EquationInfo(number: number, status: 2, mathpix: mathpixResult, wolfram: getPodsFromWolframResponse(result: wolframResult))
+                    
+                    print(equationInfos)
                     
                     if case .failure(let error) = wolframResult {
                         print("Wolfram error: \(error)")
@@ -306,9 +311,9 @@ struct ContentView: View {
 
 
     func submit() {
-        let newInfo = EquationInfo()
+        let newInfo = EquationInfo(number: equationInfos.count + 1, status: 0, mathpix: .failure(CustomError.MathpixDisplayInitializationError), wolfram: .failure(CustomError.WolframDisplayInitializationError))
         equationInfos.insert(newInfo, at: 0)
-        processStrokes(strokes: getStrokePointsInRect(), number: equationInfos.count)
+        processStrokes(strokes: getStrokePointsInRect(rect: getBoundingRect()), number: equationInfos.count)
     }
 }
 
@@ -382,9 +387,19 @@ struct WolframPod: Hashable {
 
 
 struct EquationInfo: Hashable {
-    public let status: Int = 0
-    public let mathpix: Result<String, Error> = .failure(CustomError.MathpixDisplayInitializationError)
-    public let wolfram: Result<[WolframPod], Error> = .failure(CustomError.WolframDisplayInitializationError)
+    public let number: Int
+    public let status: Int
+    public let mathpix: Result<String, Error>
+    public let wolfram: Result<[WolframPod], Error>
+    
+    static func == (lhs: EquationInfo, rhs: EquationInfo) -> Bool {
+        return lhs.number == rhs.number
+    }
+
+    /// Required for the hashable interface
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(number)
+    }
 }
 
 
@@ -392,10 +407,10 @@ struct EquationInfo: Hashable {
 /// Includes Mathpix Output and all of the pods returned from wolfram aplha
 struct EquationBox: View, Hashable {
     /// Data associated with this particular EquationBox
-    @state private var info: EquationInfo
+    @State var info: EquationInfo
     
     /// Whether or not the equation box is expanded
-    @State private var isExpanded = false
+    @State var isExpanded = false
     
     var body: some View {
         // Main VStack for storing all information in box
@@ -418,7 +433,7 @@ struct EquationBox: View, Hashable {
                             Text(latex)
                                 .padding()
                         case .failure(let error):
-                            Text(error)
+                            Text("Mathpix error: ")
                                 .padding()
                     }
                     
@@ -456,7 +471,7 @@ struct EquationBox: View, Hashable {
                             }
 
                         case .failure(let error):
-                            Text(error)
+                            Text("Wolfram error: ")
                                 .padding()    
                     }
                 }
@@ -481,13 +496,12 @@ struct EquationBox: View, Hashable {
 
     /// Required for the hashable interface
     func hash(into hasher: inout Hasher) {
-        hasher.combine(status)
         hasher.combine(info)
     }
     
     
     /// Required for the hashable interface
     static func == (lhs: EquationBox, rhs: EquationBox) -> Bool {
-        return lhs.status == rhs.status && lhs.info == rhs.info
+        return lhs.info == rhs.info
     }
 }

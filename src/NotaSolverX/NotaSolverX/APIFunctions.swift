@@ -102,8 +102,9 @@ func fetchDataFromMathpix (strokeData: [[CGPoint]], completion: @escaping ((Resu
         // Parse response as json
         do {
             if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                guard let resultString = jsonObject["latex_styled"] as? String else {
+                guard let resultString = jsonResponse["latex_styled"] as? String else {
                     completion(.failure(CustomError.MathpixResponseDecodingError))
+                    return
                 }
                 completion(.success(resultString))
             } else {
@@ -137,7 +138,7 @@ func fetchDataFromWolfram (latex: String, completion: @escaping ((Result<[String
     let appID = "JG4TGL-G86953GKY8"
 
     // Convert data from Mathpix into wolfram input
-    let wolframInputString = convertMathpixResponseToInputString(latex)
+    let wolframInputString = convertMathpixResponseToInputString(latex: latex)
 
     // Print out wolfram input string
     print("Wolfram input string (in request): \(wolframInputString)")
