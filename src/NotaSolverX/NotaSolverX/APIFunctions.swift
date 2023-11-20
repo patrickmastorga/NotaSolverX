@@ -67,7 +67,7 @@ func convertStrokeToJsonData (strokeData: [[CGPoint]]) -> Data? {
 /// - Parameter completion: completion handler to process data
 func fetchDataFromMathpix (strokeData: [[CGPoint]], completion: @escaping ((Result<String, Error>) -> Void)) {
     let appID = "notasolverx_12721e_64cb20"
-    let appKey = "e8070a38f235821bbec6507a6a5841e444d287e30640f0ab37935fdbdc647c33" // FIGURE OUT CLIENT SIDE TOKENS
+    let appKey = "NICE TRY" // FIGURE OUT CLIENT SIDE TOKENS
 
     // Convert stroke data to json string
     guard let strokeJsonData = convertStrokeToJsonData(strokeData: strokeData) else {
